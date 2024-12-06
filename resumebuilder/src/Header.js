@@ -1,7 +1,7 @@
 import React from 'react';
 import {FaDigitalOcean} from 'react-icons/fa'
 import {Link} from 'react-router-dom';
-const Header = () => {
+const Header = ({account}) => {
   return (
     <div>
       <header className="header">
@@ -10,7 +10,7 @@ const Header = () => {
             <h1>DRB</h1>
         </span>
         <span>
-            <Link to="/login" className="login_link">Login/SignUp</Link>
+            <Link to="/login" className="login_link">{account}</Link>
         </span>
       </header>
     </div>

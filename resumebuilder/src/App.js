@@ -1,71 +1,93 @@
-import { Routes,Route } from 'react-router-dom';
-import './App.css';
-import Welcome from './Welcome';
-import Login from './userDetailComponents/Login';
-import Education from './userDetailComponents/Education';
-import PersonalInfo from './userDetailComponents/PersonalInfo';
-import Project from './userDetailComponents/Project';
-import Skills from './userDetailComponents/Skills';
-import Hobbies from './userDetailComponents/Hobbies';
-import IntrestDomain from './userDetailComponents/IntrestDomain'
-import Header from './Header';
-import HomePage from './userDetailComponents/HomePage'
-import {useState} from 'react'
+import React, { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import "./App.css";
+import Welcome from "./Welcome";
+import Login from "./userDetailComponents/Login";
+import Education from "./userDetailComponents/Education";
+import PersonalInfo from "./userDetailComponents/PersonalInfo";
+import Project from "./userDetailComponents/Project";
+import Skills from "./userDetailComponents/Skills";
+import Hobbies from "./userDetailComponents/Hobbies";
+import Header from "./Header";
+import HomePage from "./userDetailComponents/HomePage";
+import Account from './userDetailComponents/Account';
+
 function App() {
-  const [account,setaccount]=useState("Login/SignUp");
-  const tempjson = {
-    personalInfo:{
-      fullname:"",
-      contactInfo:{
+  const [account, setAccount] = useState("Login/SignUp");
+  const [tempJson, setTempJson] = useState({
+    username: "",
+    password: "",
+    personalInfo: {
+      fullname: "",
+      contactInfo: {
         phoneNumber: null,
-        email:"",
-        linkedIn:"",
-        github:""
+        email: "",
+        linkedIn: "",
+        github: "", 
       },
-      address:"",
-      professionalTitle:""
+      address: "",
+      professionalTitle: "",
     },
-    educationalInfo:{
-      degree:"",
-      institutionName:"",
-      city:"",
-      courseDuration:null,
-      gradeCGPA:null,
-      internship:""
+    educationalInfo: {
+      degree: "",
+      institutionName: "",
+      city: "",
+      courseDuration: null,
+      gradeCGPA: null,
+      internship: "",
     },
-    projectInfo:{
-      projectTitle:"",
-      projectDescription:"",
-      technologiesUsed:[],
-      githubLink:"",
-      duration:null,
+    projectInfo: {
+      projectTitle: "",
+      projectDescription: "",
+      technologiesUsed: [],
+      githubLink: "",
+      duration: null,
     },
-    skills:{
-      technicalSkill:[],
-      softSkill:[]
+    skills: {
+      technicalSkill: [],
+      softSkill: [],
     },
-    hobbiesLanguage:{
-      personalIntrest:[],
-      languageKnown:[]
+    hobbiesLanguage: {
+      personalIntrest: [],
+      languageKnown: [],
     },
-    intrestedDomain:{
-      domain:""
-    }
-  }
+    intrestedDomain: {
+      domain: "",
+    },
+  });
+  const [userData , setUserData] = useState({tempJson});
 
   return (
     <>
-      <Header account={account}/> 
+      <Header account={account} />
       <Routes>
-        <Route path="/" element={<Welcome />}/>
-        <Route path="/login" element={<Login setaccount={setaccount}/>}/> l
-        <Route path="/signup/personalinfo" element={<PersonalInfo tempjson={tempjson}/>}/>
-        <Route path="/signup/education" element={<Education/>} tempjson={tempjson}/>
-        <Route path="/signup/projects" element={<Project/>} tempjson={tempjson}/>
-        <Route path="/signup/skills" element={<Skills/>} tempjson={tempjson}/>
-        <Route path="/signup/hobbies" element={<Hobbies/>} tempjson={tempjson}/>
-        <Route path="/signup/intrestdomain" element={<IntrestDomain/>} tempjson={tempjson}/>
-        <Route path="/home" element={<HomePage/>}/>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/login" element={<Login setAccount={setAccount} setUserData={setUserData}/> } />
+        <Route path="/signup/createaccount" 
+        element={<Account tempJson={tempJson} 
+        setTempJson={setTempJson} />}
+        />
+        <Route
+          path="/signup/personalinfo"
+          element={<PersonalInfo tempJson={tempJson} setTempJson={setTempJson} />}
+        />
+        <Route
+          path="/signup/education"
+          element={<Education tempJson={tempJson} setTempJson={setTempJson} />}
+        />
+        <Route
+          path="/signup/projects"
+          element={<Project tempJson={tempJson} setTempJson={setTempJson} />}
+        />
+        <Route
+          path="/signup/skills"
+          element={<Skills tempJson={tempJson} setTempJson={setTempJson} />}
+        />
+        <Route
+          path="/signup/hobbies"
+          element={<Hobbies tempJson={tempJson} setTempJson={setTempJson} setUserData={setUserData} userData={userData}/>}
+        />
+        <Route path="/home" element={<HomePage userData={userData}/>} />
       </Routes>
     </>
   );

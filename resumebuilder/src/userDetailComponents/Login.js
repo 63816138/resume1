@@ -1,13 +1,12 @@
-import React from 'react';
-import {useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Login = () =>  {
+const Login = ({ setAccount,setUserData }) => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-  const [login,setlogin]=useState("/login");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,12 +16,35 @@ const Login = () =>  {
     }));
   };
 
-  const handleLogin = () => {
-    if(formData.username==="Mugesh129" && formData.password==="1234"){
-      setlogin("/home");
+  const handleLogin = async () => {
+    if (!formData.username || !formData.password) {
+      alert('Please fill in both fields.');
+      return;
     }
-    else{
-      setlogin("/login");
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log(result);
+        setAccount(result.username);
+        setUserData(result);
+        localStorage.setItem('userData', JSON.stringify(result)); // Store user data in localStorage
+        navigate('/home');
+      } else {
+        alert(result.error || 'Invalid username or password!');
+      }
+    } catch (err) {
+      console.error('Error during login:', err);
+      alert('An error occurred. Please try again.');
     }
   };
 
@@ -55,17 +77,17 @@ const Login = () =>  {
           style={styles.input}
         />
       </div>
-      <div style={{alignItems:"center",justifyContent:"center"}}>
-        <Link onClick={handleLogin} to={login}>
+      <div style={{ alignItems: "center", justifyContent: "center" }}>
+        <button onClick={handleLogin} style={styles.button}>
           Login
-        </Link>
-        <Link  to="/signup/personalinfo">
-            Sign Up
+        </button>
+        <Link to="/signup/createaccount" style={styles.link}>
+          Sign Up
         </Link>
       </div>
     </div>
   );
-}
+};
 
 const styles = {
   container: {
@@ -101,15 +123,13 @@ const styles = {
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
-  },
-  linkContainer: {
-    marginTop: "15px",
-    textAlign: "center",
+    marginBottom: "10px",
   },
   link: {
-    margin: "0 10px",
     color: "#007bff",
     textDecoration: "none",
+    textAlign: "center",
+    display: "block",
   },
 };
 
